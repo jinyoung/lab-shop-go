@@ -11,7 +11,7 @@ type OrderPlaced struct{
 	ProductId string `json:"productId" type:"string"` 
 	Qty int `json:"qty" type:"int"` 
 	CustomerId string `json:"customerId" type:"string"` 
-	Amount  `json:"amount" type:""` 
+	Amount int `json:"amount" type:""` 
 	Status string `json:"status" type:"string"` 
 	Address string `json:"address" type:"string"` 
 	

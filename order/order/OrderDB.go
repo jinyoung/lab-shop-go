@@ -1,12 +1,14 @@
 package order
+
 import (
+	"log"
+
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
-type OrderDB struct{
+type OrderDB struct {
 	db *gorm.DB
 }
 
@@ -16,7 +18,7 @@ func OrderDBInit() {
 	var err error
 	orderrepository = &OrderDB{}
 	orderrepository.db, err = gorm.Open(sqlite.Open("Order_table.db"), &gorm.Config{})
-	
+
 	if err != nil {
 		panic("DB Connection Error")
 	}
@@ -28,8 +30,8 @@ func OrderRepository() *OrderDB {
 	return orderrepository
 }
 
-func (self *OrderDB)save(entity interface{}) error {
-	
+func (self *OrderDB) save(entity interface{}) error {
+
 	tx := self.db.Create(entity)
 
 	if tx.Error != nil {
@@ -39,15 +41,15 @@ func (self *OrderDB)save(entity interface{}) error {
 	return nil
 }
 
-func (self *OrderDB)GetList() []Order{
-	
+func (self *OrderDB) GetList() []Order {
+
 	entities := []Order{}
 	self.db.Find(&entities)
 
 	return entities
 }
 
-func (self *OrderDB)FindById(id int) (*Order, error){
+func (self *OrderDB) FindById(id int) (*Order, error) {
 	entity := &Order{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {
@@ -61,12 +63,12 @@ func (self *OrderDB)FindById(id int) (*Order, error){
 	}
 }
 
-func (self *OrderDB) Delete(entity *Order) error{
+func (self *OrderDB) Delete(entity *Order) error {
 	err2 := self.db.Delete(&entity).Error
 	return err2
 }
 
-func (self *OrderDB) Update(id int, params map[string]string) error{
+func (self *OrderDB) Update(id int, params map[string]string) (*Order, error) {
 	entity := &Order{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {

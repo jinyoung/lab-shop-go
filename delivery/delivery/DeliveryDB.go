@@ -1,12 +1,14 @@
 package delivery
+
 import (
+	"log"
+
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
-type DeliveryDB struct{
+type DeliveryDB struct {
 	db *gorm.DB
 }
 
@@ -16,7 +18,7 @@ func DeliveryDBInit() {
 	var err error
 	deliveryrepository = &DeliveryDB{}
 	deliveryrepository.db, err = gorm.Open(sqlite.Open("Delivery_table.db"), &gorm.Config{})
-	
+
 	if err != nil {
 		panic("DB Connection Error")
 	}
@@ -28,8 +30,8 @@ func DeliveryRepository() *DeliveryDB {
 	return deliveryrepository
 }
 
-func (self *DeliveryDB)save(entity interface{}) error {
-	
+func (self *DeliveryDB) save(entity interface{}) error {
+
 	tx := self.db.Create(entity)
 
 	if tx.Error != nil {
@@ -39,15 +41,15 @@ func (self *DeliveryDB)save(entity interface{}) error {
 	return nil
 }
 
-func (self *DeliveryDB)GetList() []Delivery{
-	
+func (self *DeliveryDB) GetList() []Delivery {
+
 	entities := []Delivery{}
 	self.db.Find(&entities)
 
 	return entities
 }
 
-func (self *DeliveryDB)FindById(id int) (*Delivery, error){
+func (self *DeliveryDB) FindById(id int) (*Delivery, error) {
 	entity := &Delivery{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {
@@ -61,12 +63,12 @@ func (self *DeliveryDB)FindById(id int) (*Delivery, error){
 	}
 }
 
-func (self *DeliveryDB) Delete(entity *Delivery) error{
+func (self *DeliveryDB) Delete(entity *Delivery) error {
 	err2 := self.db.Delete(&entity).Error
 	return err2
 }
 
-func (self *DeliveryDB) Update(id int, params map[string]string) error{
+func (self *DeliveryDB) Update(id int, params map[string]string) (*Delivery, error) {
 	entity := &Delivery{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {
