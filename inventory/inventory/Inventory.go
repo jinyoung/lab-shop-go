@@ -1,32 +1,27 @@
 package inventory
 
 import (
-	"gopkg.in/jeevatkm/go-model.v1"
-	
 	"gorm.io/gorm"
-	"fmt"
-	"inventory/external"
+	//"inventory/external"
 )
 
 type Inventory struct {
 	gorm.Model
-	Id int `gorm:"primaryKey" json:"id" type:"int"`
+	Id    int `gorm:"primaryKey" json:"id" type:"int"`
 	Stock int `json:"stock"`
-
 }
 
-func (self *Inventory) onPostPersist() (err error){
+func (self *Inventory) onPostPersist() (err error) {
 
 	return nil
 }
-func (self *Inventory) onPrePersist() (err error){ return nil }
-func (self *Inventory) onPreUpdate() (err error){ return nil }
-func (self *Inventory) onPostUpdate() (err error){ return nil }
-func (self *Inventory) onPreRemove() (err error){ return nil }
-func (self *Inventory) onPostRemove() (err error){ return nil }
+func (self *Inventory) onPrePersist() (err error) { return nil }
+func (self *Inventory) onPreUpdate() (err error)  { return nil }
+func (self *Inventory) onPostUpdate() (err error) { return nil }
+func (self *Inventory) onPreRemove() (err error)  { return nil }
+func (self *Inventory) onPostRemove() (err error) { return nil }
 
-
-func (self *DecreaseStock) DecreaseStock(orderPlaced *OrderPlaced){
+func (self *DecreaseStock) DecreaseStock(orderPlaced *OrderPlaced) {
 	/** Example 1:  new item
 	inventory := &Inventory{}
 	inventoryrepository.save(inventory)
@@ -41,7 +36,7 @@ func (self *DecreaseStock) DecreaseStock(orderPlaced *OrderPlaced){
 	}
 	*/
 }
-func (self *IncreaseStock) IncreaseStock(orderCancelled *OrderCancelled){
+func (self *IncreaseStock) IncreaseStock(orderCancelled *OrderCancelled) {
 	/** Example 1:  new item
 	inventory := &Inventory{}
 	inventoryrepository.save(inventory)

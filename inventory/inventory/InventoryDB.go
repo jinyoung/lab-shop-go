@@ -1,12 +1,14 @@
 package inventory
+
 import (
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	//_ "github.com/jinzhu/gorm/dialects/mysql"
+	"log"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
-type InventoryDB struct{
+type InventoryDB struct {
 	db *gorm.DB
 }
 
@@ -16,7 +18,7 @@ func InventoryDBInit() {
 	var err error
 	inventoryrepository = &InventoryDB{}
 	inventoryrepository.db, err = gorm.Open(sqlite.Open("Inventory_table.db"), &gorm.Config{})
-	
+
 	if err != nil {
 		panic("DB Connection Error")
 	}
@@ -28,8 +30,8 @@ func InventoryRepository() *InventoryDB {
 	return inventoryrepository
 }
 
-func (self *InventoryDB)save(entity interface{}) error {
-	
+func (self *InventoryDB) save(entity interface{}) error {
+
 	tx := self.db.Create(entity)
 
 	if tx.Error != nil {
@@ -39,15 +41,15 @@ func (self *InventoryDB)save(entity interface{}) error {
 	return nil
 }
 
-func (self *InventoryDB)GetList() []Inventory{
-	
+func (self *InventoryDB) GetList() []Inventory {
+
 	entities := []Inventory{}
 	self.db.Find(&entities)
 
 	return entities
 }
 
-func (self *InventoryDB)FindById(id int) (*Inventory, error){
+func (self *InventoryDB) FindById(id int) (*Inventory, error) {
 	entity := &Inventory{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {
@@ -61,12 +63,12 @@ func (self *InventoryDB)FindById(id int) (*Inventory, error){
 	}
 }
 
-func (self *InventoryDB) Delete(entity *Inventory) error{
+func (self *InventoryDB) Delete(entity *Inventory) error {
 	err2 := self.db.Delete(&entity).Error
 	return err2
 }
 
-func (self *InventoryDB) Update(id int, params map[string]string) error{
+func (self *InventoryDB) Update(id int, params map[string]string) error {
 	entity := &Inventory{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {

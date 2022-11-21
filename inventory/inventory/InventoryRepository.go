@@ -2,11 +2,13 @@ package inventory
 
 import (
 	"fmt"
+	//"github.com/labstack/echo"
+	"net/http"
+	"strconv"
+
 	"github.com/labstack/echo"
 	"github.com/pmoule/go2hal/hal"
 	"gorm.io/gorm"
-	"net/http"
-	"strconv"
 )
 
 func (self *Inventory) Get(c echo.Context) error {
@@ -48,7 +50,7 @@ func (self *Inventory) Get(c echo.Context) error {
 	return c.JSONBlob(http.StatusOK, jsonBytes)
 }
 
-func (self *Inventory) FindById(c echo.Context) error{
+func (self *Inventory) FindById(c echo.Context) error {
 	repository := InventoryRepository()
 	id, _ := strconv.Atoi(c.Param("id"))
 	self, err := repository.FindById(id)
@@ -77,7 +79,7 @@ func (self *Inventory) FindById(c echo.Context) error{
 	return c.JSONBlob(http.StatusOK, jsonBytes)
 }
 
-func (self *Inventory) Persist(c echo.Context) error{
+func (self *Inventory) Persist(c echo.Context) error {
 	repository := InventoryRepository()
 	params := make(map[string]string)
 	var err error
@@ -114,7 +116,7 @@ func (self *Inventory) Persist(c echo.Context) error{
 	}
 }
 
-func (self *Inventory) Put(c echo.Context) error{
+func (self *Inventory) Put(c echo.Context) error {
 	repository := InventoryRepository()
 	id, _ := strconv.Atoi(c.Param("id"))
 	params := make(map[string]string)
@@ -143,7 +145,7 @@ func (self *Inventory) Put(c echo.Context) error{
 	}
 }
 
-func (self *Inventory) Remove(c echo.Context) error{
+func (self *Inventory) Remove(c echo.Context) error {
 	repository := InventoryRepository()
 	id, _ := strconv.Atoi(c.Param("id"))
 	self, err := repository.FindById(id)

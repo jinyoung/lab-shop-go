@@ -30,7 +30,7 @@ func (self *Delivery) onPostUpdate() (err error) { return nil }
 func (self *Delivery) onPreRemove() (err error)  { return nil }
 func (self *Delivery) onPostRemove() (err error) { return nil }
 
-func AddToDeliveryList(orderPlaced *OrderPlaced) {
+func AddToDeliveryList(orderPlaced *OrderPlaced) { //TODO:  static method
 	/** Example 1:  new item
 	delivery := &Delivery{}
 	deliveryrepository.save(delivery)

@@ -68,7 +68,7 @@ func (self *OrderDB) Delete(entity *Order) error {
 	return err2
 }
 
-func (self *OrderDB) Update(id int, params map[string]string) (*Order, error) {
+func (self *OrderDB) Update(id int, params map[string]string) (*Order, error) { //TODO: template 수정
 	entity := &Order{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {

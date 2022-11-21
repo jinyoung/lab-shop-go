@@ -1,19 +1,19 @@
 package inventory
 
 import (
-	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	//"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
+	"encoding/json"
 	"fmt"
-    "encoding/json"
-    "inventory/config"
+	"inventory/config"
 )
 
 var producer *kafka.Producer
 var consumer *kafka.Consumer
 var topic string
 
-func InitProducer(platform string){
+func InitProducer(platform string) {
 	var err error
-    var options = config.Reader(platform)
+	var options = config.Reader(platform)
 	producer, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": options["bootstrap_servers"]})
 	if err != nil {
 		panic(err)
@@ -21,15 +21,15 @@ func InitProducer(platform string){
 	topic = options["destination"]
 }
 
-func InitConsumer(platform string){
+func InitConsumer(platform string) {
 	var err error
-    var options = config.Reader(platform)
+	var options = config.Reader(platform)
 	consumer, err = kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": options["bootstrap_servers"],
-		"group.id":          options["group_id"],
+		"bootstrap.servers":     options["bootstrap_servers"],
+		"group.id":              options["group_id"],
 		"broker.address.family": "v4",
 		"session.timeout.ms":    6000,
-		"auto.offset.reset": "earliest",
+		"auto.offset.reset":     "earliest",
 	})
 	topic = options["destination"]
 
@@ -38,43 +38,42 @@ func InitConsumer(platform string){
 	}
 	defer consumer.Close()
 	KafkaConsumer()
-	
+
 }
 
-func KafkaProducer() (*kafka.Producer, string){
-	
+func KafkaProducer() (*kafka.Producer, string) {
+
 	return producer, topic
 }
 
-func KafkaConsumer(){
-    
-	
-    consumer.SubscribeTopics([]string{topic}, nil)
+func KafkaConsumer() {
+
+	consumer.SubscribeTopics([]string{topic}, nil)
 
 	var dat map[string]interface{}
-    for {
-        msg, err := consumer.ReadMessage(-1)
-        if err == nil {
+	for {
+		msg, err := consumer.ReadMessage(-1)
+		if err == nil {
 			if err := json.Unmarshal(msg.Value, &dat); err != nil {
 				panic(err)
 			}
-            if dat["eventType"] == "OrderPlaced"{
-                wheneverOrderPlaced_DecreaseStock(dat)
-            }
-            if dat["eventType"] == "OrderCancelled"{
-                wheneverOrderCancelled_IncreaseStock(dat)
-            }
-			
-        } else {
-            // The client will automatically try to recover from all errors.
-            fmt.Printf("Consumer error: %v (%v)\n", err, msg)
-        }
-    }
+			if dat["eventType"] == "OrderPlaced" {
+				wheneverOrderPlaced_DecreaseStock(dat)
+			}
+			if dat["eventType"] == "OrderCancelled" {
+				wheneverOrderCancelled_IncreaseStock(dat)
+			}
+
+		} else {
+			// The client will automatically try to recover from all errors.
+			fmt.Printf("Consumer error: %v (%v)\n", err, msg)
+		}
+	}
 }
 
-func Streamhandler(message string){
+func Streamhandler(message string) {
 	producer, topic := KafkaProducer()
-	
+
 	producer.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
 		Value:          []byte(message),

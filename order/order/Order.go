@@ -2,10 +2,11 @@ package order
 
 import (
 	"gopkg.in/jeevatkm/go-model.v1"
-	
-	"gorm.io/gorm"
+
 	"fmt"
 	"order/external"
+
+	"gorm.io/gorm"
 )
 
 type Order struct {
@@ -31,7 +32,7 @@ func (self *Order) onPostPersist() (err error){
 func (self *Order) onPrePersist() (err error){
 
 	// Get request from Inventory
-	inventory := &external.Inventory{}
+	inventory := &external.Inventory{}     //TODO 오류가 안나는...
 	resp := external.GetInventory(inventory.Id)
 	fmt.Println(resp)
 
