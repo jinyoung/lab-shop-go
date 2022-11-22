@@ -1,11 +1,12 @@
 package customercenter
 
 import (
-	"github.com/mitchellh/mapstructure"
 	"log"
+
+	"github.com/mitchellh/mapstructure"
 )
 
-func whenOrderPlaced_then_CREATE_1 (inputEvent map[string]interface{}) {
+func whenOrderPlaced_then_CREATE_1(inputEvent map[string]interface{}) {
 
 	orderPlaced := NewOrderPlaced()
 	mapstructure.Decode(inputEvent, &orderPlaced)
@@ -13,7 +14,7 @@ func whenOrderPlaced_then_CREATE_1 (inputEvent map[string]interface{}) {
 	myPage := &MyPage{}
 	myPage.OrderId = orderPlaced.Id
 	myPage.ProductId = orderPlaced.ProductId
-	myPage.OrderStatus = orderPlaced.직접입력
+	myPage.OrderStatus = "OrderPlaced"
 
 	// view 레파지 토리에 save
 	repository := MyPageRepository()
@@ -24,10 +25,10 @@ func whenOrderPlaced_then_CREATE_1 (inputEvent map[string]interface{}) {
 	}
 }
 
-func whenDeliveryStarted_then_UPDATE_1 (inputEvent map[string]interface{}) {
+func whenDeliveryStarted_then_UPDATE_1(inputEvent map[string]interface{}) {
 
 	deliveryStarted := NewDeliveryStarted()
-	mapstructure.Decode(inputEvent,&deliveryStarted)
+	mapstructure.Decode(inputEvent, &deliveryStarted)
 
 	var myPages []MyPage
 	repository := MyPageRepository()
@@ -38,7 +39,7 @@ func whenDeliveryStarted_then_UPDATE_1 (inputEvent map[string]interface{}) {
 		log.Printf("Select error: %v \n", err)
 	}
 	for _, viewEntity := range myPages {
-		viewEntity.DeliveryStatus = deliveryStarted.직접입력
+		viewEntity.DeliveryStatus = "DeliveryStarted"
 		err1 := repository.db.Updates(viewEntity).Error
 		if err1 != nil {
 			// TODO error control
@@ -46,4 +47,3 @@ func whenDeliveryStarted_then_UPDATE_1 (inputEvent map[string]interface{}) {
 		}
 	}
 }
-

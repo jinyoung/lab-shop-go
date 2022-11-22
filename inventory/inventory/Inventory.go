@@ -21,22 +21,23 @@ func (self *Inventory) onPostUpdate() (err error) { return nil }
 func (self *Inventory) onPreRemove() (err error)  { return nil }
 func (self *Inventory) onPostRemove() (err error) { return nil }
 
-func (self *DecreaseStock) DecreaseStock(orderPlaced *OrderPlaced) {
+func DecreaseStock(orderPlaced *OrderPlaced) {
 	/** Example 1:  new item
 	inventory := &Inventory{}
 	inventoryrepository.save(inventory)
 
 	*/
 
-	/** Example 2:  finding and process
-	id, _ := strconv.ParseInt(orderPlaced.id, 10, 64)
-	point, err := PointRepository().FindById(int(id))
-	if err != nil {
+	/** Example 2:  finding and process	*/
 
+	inventory, err := inventoryrepository.FindById(orderPlaced.Id)
+	if err != nil {
+		inventory.Stock = inventory.Stock - 1
+		inventoryrepository.save(inventory)
 	}
-	*/
+
 }
-func (self *IncreaseStock) IncreaseStock(orderCancelled *OrderCancelled) {
+func IncreaseStock(orderCancelled *OrderCancelled) {
 	/** Example 1:  new item
 	inventory := &Inventory{}
 	inventoryrepository.save(inventory)

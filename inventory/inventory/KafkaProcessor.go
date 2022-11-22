@@ -1,10 +1,11 @@
 package inventory
 
 import (
-	//"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 	"encoding/json"
 	"fmt"
 	"inventory/config"
+
+	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
 var producer *kafka.Producer

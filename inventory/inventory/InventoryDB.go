@@ -68,7 +68,7 @@ func (self *InventoryDB) Delete(entity *Inventory) error {
 	return err2
 }
 
-func (self *InventoryDB) Update(id int, params map[string]string) error {
+func (self *InventoryDB) Update(id int, params map[string]string) (*Inventory, error) {
 	entity := &Inventory{}
 	txDb := self.db.Where("id = ?", id)
 	if txDb.Error != nil {
